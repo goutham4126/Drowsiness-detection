@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Drowsiness Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@0.0.3/dist/face-landmarks-detection.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./test.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-car"></i> Driver Drowsiness Detection</h1>
+            <p class="subtitle">Real-time monitoring system to prevent accidents caused by fatigue</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="video-panel">
+                <h2 class="panel-title"><i class="fas fa-video"></i> Live Camera Feed</h2>
+                <div id="video-container">
+                    <video id="video" width="640" height="480" autoplay muted></video>
+                    <canvas id="canvas" width="640" height="480"></canvas>
+                </div>
+                
+                <div class="face-mesh-toggle">
+                    <span>Show Face Mesh:</span >
+                    <label class="toggle-switch">
+                        <input title="fd" type="checkbox" id="meshToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="controls">
+                    <button id="startBtn" class="btn-primary"><i class="fas fa-play"></i> Start Detection</button>
+                    <button id="stopBtn" class="btn-danger" disabled><i class="fas fa-stop"></i> Stop Detection</button>
+                    <button id="testSirenBtn" class="btn-warning"><i class="fas fa-bell"></i> Test Alarm</button>
+                    <button id="stopSirenBtn" class="btn-danger" disabled><i class="fas fa-bell-slash"></i> Silence Alarm</button>
+                </div>
+                
+                <div id="alert" class="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>DROWSINESS DETECTED! PLEASE TAKE A BREAK!</span>
+                </div>
+            </div>
+            
+            <div class="stats-panel">
+                <h2 class="panel-title"><i class="fas fa-chart-line"></i> Performance Metrics</h2>
+                
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-eye"></i> Eye Aspect Ratio (EAR)</div>
+                    <div class="stat-value" id="ear-value">0.00</div>
+                    <div class="ear-indicator">
+                        <div class="ear-threshold" id="ear-threshold"></div>
+                    </div>
+                    <div id="ear-status" class="badge badge-success">Eyes Open</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title"><i class="far fa-clock"></i> Eyes Closed Duration</div>
+                    <div class="stat-value" id="closed-duration">0.00s</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-tachometer-alt"></i> System Status</div>
+                    <div class="stat-value" id="status">Loading model...</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-film"></i> Frame Rate</div>
+                    <div class="stat-value" id="fps">0 FPS</div>
+                </div>
+                
+                <div class="history-chart">
+                    <div class="chart-line" style="bottom: 25%"></div>
+                    <div class="chart-line" style="bottom: 50%"></div>
+                    <div class="chart-line" style="bottom: 75%"></div>
+                    <canvas id="earChart" width="100%" height="100%"></canvas>
+                </div>
+                
+                <div class="settings">
+                    <h2 class="panel-title"><i class="fas fa-cog"></i> Settings</h2>
+                    
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">EAR Threshold <span id="thresholdValue">0.25</span></div>
+                            <input title="fd" type="range" id="thresholdSlider" min="0.1" max="0.4" step="0.01" value="0.25">
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Drowsiness Duration <span id="durationValue">0.6</span>s</div>
+                            <input title="fd" type="range" id="durationSlider" min="0.1" max="3" step="0.1" value="0.6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Driver Drowsiness Detection System &copy; 2023 | Powered by TensorFlow.js</p>
+        </div>
+    </div>
+    <script src="./test.js"></script>
+</body>
+</html>
